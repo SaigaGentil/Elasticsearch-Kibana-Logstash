@@ -1,0 +1,104 @@
+version: "2.2"
+services:
+  la001dockerq:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    container_name: la001dockerq
+    environment:
+      - node.name=la001dockerq
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=la002dockerq,la003dockerq
+      - cluster.initial_master_nodes=la001dockerq,la002dockerq,la003dockerq
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/la001dockerq/la001dockerq.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/la001dockerq/la001dockerq.key
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/
+      - certs:$CERTS_DIR
+    ports:
+      - 127.0.0.1:9200:9200
+
+  la002dockerq:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    container_name: la002dockerq
+    environment:
+      - node.name=la002dockerq
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=la001dockerq,la003dockerq
+      - cluster.initial_master_nodes=la001dockerq,la002dockerq,la003dockerq
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/la002dockerq/la002dockerq.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/la002dockerq/la002dockerq.key
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/
+      - certs:$CERTS_DIR
+
+  la003dockerq:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    container_name: la003dockerq
+    environment:
+      - node.name=la003dockerq
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=la001dockerq,la002dockerq
+      - cluster.initial_master_nodes=la001dockerq,la002dockerq,la003dockerq
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/la003dockerq/la003dockerq.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/la003dockerq/la003dockerq.key
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03:/usr/share/elasticsearch/
+      - certs:$CERTS_DIR
+
+  la004dockerq:
+    image: docker.elastic.co/kibana/kibana:7.11.1
+    container_name: la004dockerq
+    ports:
+      - 127.0.0.1:5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://la001dockerq:9200
+      ELASTICSEARCH_HOSTS: '["https://la001dockerq:9200","http://la002dockerq:9200","http://la003dockerq:9200"]'
+      ELASTICSEARCH_USERNAME: $ELASTIC_USER
+      ELASTICSEARCH_PASSWORD: $ELASTIC_PASSWORD
+
+volumes:
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+  certs:
+    driver: local
+# networks:
+#   elastic:
+#     driver: bridge

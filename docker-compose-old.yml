@@ -1,0 +1,70 @@
+version: "2.2"
+services:
+  la001dockerq:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    container_name: la001dockerq
+    environment:
+      - node.name=la001dockerq
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=la002dockerq,la003dockerq
+      - cluster.initial_master_nodes=la001dockerq,la002dockerq,la003dockerq
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - dataes01:/usr/share/elasticsearch/data
+    ports:
+      - 127.0.0.1:9200:9200
+    networks:
+      - elastic
+  la002dockerq:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    container_name: la002dockerq
+    environment:
+      - node.name=la002dockerq
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=la001dockerq,la003dockerq
+      - cluster.initial_master_nodes=la001dockerq,la002dockerq,la003dockerq
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - dataes02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+  la003dockerq:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    container_name: la003dockerq
+    environment:
+      - node.name=la003dockerq
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=la001dockerq,la002dockerq
+      - cluster.initial_master_nodes=la001dockerq,la002dockerq,la003dockerq
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - dataes03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+volumes:
+  dataes01:
+    driver: local
+  dataes02:
+    driver: local
+  dataes03:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge

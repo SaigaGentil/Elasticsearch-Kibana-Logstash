@@ -1,0 +1,21 @@
+instances:
+  - name: la001dockerq
+    dns:
+      - la001dockerq
+      - localhost
+    ip:
+      - 127.0.0.1
+
+  - name: la002dockerq
+    dns:
+      - la002dockerq
+      - localhost
+    ip:
+      - 127.0.0.1
+
+  - name: la003dockerq
+    dns:
+      - la003dockerq
+      - localhost
+    ip:
+      - 127.0.0.1

@@ -1,7 +1,7 @@
 version: "2.2"
 services:
   la001dockerq:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: la001dockerq
     environment:
       - node.name=la001dockerq
@@ -28,7 +28,7 @@ services:
       - 127.0.0.1:9200:9200
 
   la002dockerq:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: la002dockerq
     environment:
       - node.name=la002dockerq
@@ -54,7 +54,7 @@ services:
       - certs:$CERTS_DIR
 
   la003dockerq:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: la003dockerq
     environment:
       - node.name=la003dockerq
@@ -80,7 +80,7 @@ services:
       - certs:$CERTS_DIR
 
   la004dockerq:
-    image: docker.elastic.co/kibana/kibana:7.11.1
+    image: docker.elastic.co/kibana/kibana:7.12.0
     container_name: la004dockerq
     ports:
       - 127.0.0.1:5601:5601

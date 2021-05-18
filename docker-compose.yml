@@ -12,16 +12,16 @@ services:
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=$CERTS_DIR/la001dockerq/la001dockerq.key
-      - xpack.security.http.ssl.certificate=$CERTS_DIR/la001dockerq/la001dockerq.crt
-      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      # - xpack.security.http.ssl.enabled=true
+      # - xpack.security.http.ssl.key=$CERTS_DIR/la001dockerq/la001dockerq.key
+      # - xpack.security.http.ssl.certificate=$CERTS_DIR/la001dockerq/la001dockerq.crt
+      # - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.certificate=$CERTS_DIR/la001dockerq/la001dockerq.crt
       - xpack.security.transport.ssl.key=$CERTS_DIR/la001dockerq/la001dockerq.key
-      - xpack.security.authc.api_key.enabled=true
+      # - xpack.security.authc.api_key.enabled=true
     ulimits:
       memlock:
         soft: -1
@@ -44,16 +44,16 @@ services:
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=$CERTS_DIR/la002dockerq/la002dockerq.key
-      - xpack.security.http.ssl.certificate=$CERTS_DIR/la002dockerq/la002dockerq.crt
-      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      # - xpack.security.http.ssl.enabled=true
+      # - xpack.security.http.ssl.key=$CERTS_DIR/la002dockerq/la002dockerq.key
+      # - xpack.security.http.ssl.certificate=$CERTS_DIR/la002dockerq/la002dockerq.crt
+      # - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.certificate=$CERTS_DIR/la002dockerq/la002dockerq.crt
       - xpack.security.transport.ssl.key=$CERTS_DIR/la002dockerq/la002dockerq.key
-      - xpack.security.authc.api_key.enabled=true
+      # - xpack.security.authc.api_key.enabled=true
 
     ulimits:
       memlock:
@@ -75,16 +75,16 @@ services:
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=$CERTS_DIR/la003dockerq/la003dockerq.key
-      - xpack.security.http.ssl.certificate=$CERTS_DIR/la003dockerq/la003dockerq.crt
-      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      # - xpack.security.http.ssl.enabled=true
+      # - xpack.security.http.ssl.key=$CERTS_DIR/la003dockerq/la003dockerq.key
+      # - xpack.security.http.ssl.certificate=$CERTS_DIR/la003dockerq/la003dockerq.crt
+      # - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.certificate=$CERTS_DIR/la003dockerq/la003dockerq.crt
       - xpack.security.transport.ssl.key=$CERTS_DIR/la003dockerq/la003dockerq.key
-      - xpack.security.authc.api_key.enabled=true
+      # - xpack.security.authc.api_key.enabled=true
 
     ulimits:
       memlock:
@@ -100,8 +100,8 @@ services:
     ports:
       - 127.0.0.1:5601:5601
     environment:
-      ELASTICSEARCH_URL: https://la001dockerq:9200
-      ELASTICSEARCH_HOSTS: '["https://la001dockerq:9200","https://la002dockerq:9200","https://la003dockerq:9200"]'
+      ELASTICSEARCH_URL: http://la001dockerq:9200
+      ELASTICSEARCH_HOSTS: '["http://la001dockerq:9200","http://la002dockerq:9200","http://la003dockerq:9200"]'
       ELASTICSEARCH_USERNAME: $ELASTIC_USER
       ELASTICSEARCH_PASSWORD: $ELASTIC_PASSWORD
 

@@ -1,5 +1,6 @@
 version: "2.2"
 services:
+  # elasticsearch node 1 container
   la001dockerq:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: la001dockerq
@@ -12,10 +13,11 @@ services:
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
-      # - xpack.security.http.ssl.enabled=true
-      # - xpack.security.http.ssl.key=$CERTS_DIR/la001dockerq/la001dockerq.key
-      # - xpack.security.http.ssl.certificate=$CERTS_DIR/la001dockerq/la001dockerq.crt
-      # - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.authc.api_key.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/la001dockerq/la001dockerq.key
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/la001dockerq/la001dockerq.crt
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
@@ -32,6 +34,7 @@ services:
     ports:
       - 127.0.0.1:9200:9200
 
+  # elasticsearch node 2 container
   la002dockerq:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: la002dockerq
@@ -44,10 +47,11 @@ services:
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
-      # - xpack.security.http.ssl.enabled=true
-      # - xpack.security.http.ssl.key=$CERTS_DIR/la002dockerq/la002dockerq.key
-      # - xpack.security.http.ssl.certificate=$CERTS_DIR/la002dockerq/la002dockerq.crt
-      # - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.authc.api_key.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/la002dockerq/la002dockerq.key
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/la002dockerq/la002dockerq.crt
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
@@ -63,6 +67,7 @@ services:
       - data02:/usr/share/elasticsearch/
       - certs:$CERTS_DIR
 
+  # elasticsearch node 3 container
   la003dockerq:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: la003dockerq
@@ -75,10 +80,11 @@ services:
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
-      # - xpack.security.http.ssl.enabled=true
-      # - xpack.security.http.ssl.key=$CERTS_DIR/la003dockerq/la003dockerq.key
-      # - xpack.security.http.ssl.certificate=$CERTS_DIR/la003dockerq/la003dockerq.crt
-      # - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.authc.api_key.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/la003dockerq/la003dockerq.key
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/la003dockerq/la003dockerq.crt
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
@@ -94,16 +100,27 @@ services:
       - data03:/usr/share/elasticsearch/
       - certs:$CERTS_DIR
 
+  # Kibana container
   la004dockerq:
+    depends_on:
+      - la001dockerq
+      - la002dockerq
+      - la003dockerq
     image: docker.elastic.co/kibana/kibana:7.12.0
     container_name: la004dockerq
     ports:
       - 127.0.0.1:5601:5601
     environment:
-      ELASTICSEARCH_URL: http://la001dockerq:9200
-      ELASTICSEARCH_HOSTS: '["http://la001dockerq:9200","http://la002dockerq:9200","http://la003dockerq:9200"]'
+      ELASTICSEARCH_URL: https://la001dockerq:9200
+      ELASTICSEARCH_HOSTS: '["https://la001dockerq:9200","https://la002dockerq:9200","https://la003dockerq:9200"]'
       ELASTICSEARCH_USERNAME: $ELASTIC_USER
       ELASTICSEARCH_PASSWORD: $ELASTIC_PASSWORD
+      ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: $CERTS_DIR/ca/ca.crt
+      SERVER_SSL_ENABLED: "true"
+      SERVER_SSL_KEY: $CERTS_DIR/la004dockerq/la004dockerq.key
+      SERVER_SSL_CERTIFICATE: $CERTS_DIR/la004dockerq/la004dockerq.crt
+    volumes:
+      - certs:$CERTS_DIR
 
 volumes:
   data01:

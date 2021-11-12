@@ -19,3 +19,10 @@ instances:
       - localhost
     ip:
       - 127.0.0.1
+
+  - name: "la004dockerq"
+    dns:
+      - la004dockerq
+      - localhost
+    ip:
+      - 127.0.0.1
